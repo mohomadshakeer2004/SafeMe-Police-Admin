@@ -1,0 +1,5 @@
+{
+  "debug.javascript.suppressSourceMapWarnings": true,
+  "liveServer.settings.port": 8080,
+  "liveServer.settings.root": "/"
+}

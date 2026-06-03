@@ -1,0 +1,25 @@
+.safeme-map-wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+    overflow: hidden;
+}
+
+.safeme-map-wrap .safeme-map-canvas {
+    flex: 1 1 220px;
+    min-height: 220px;
+    width: 100%;
+}
+
+.safeme-map-wrap .safeme-map-details {
+    flex: 0 0 auto;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    background: #f1f5fa;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.safeme-map-wrap .safeme-map-details p {
+    margin: 0;
+}

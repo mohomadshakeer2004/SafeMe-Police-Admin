@@ -1,0 +1,21 @@
+{
+  "name": "safeme-admin",
+  "version": "2.0.0",
+  "description": "SafeMe police/admin web panel (static HTML + Firebase)",
+  "private": true,
+  "scripts": {
+    "start": "npx --yes serve . -l 8080",
+    "dev": "python3 -m http.server 8080",
+    "auth-proxy": "node scripts/local-auth-proxy.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  },
+  "dependencies": {
+    "firebase": "12.14.0",
+    "firebase-admin": "^13.0.0"
+  }
+}

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>SafeMe | Add Police Appointments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.png">
+    <!-- App css -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/metisMenu.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.17.2/dist/sweetalert2.all.min.js"></script>
+
+</head>
+
+<body class="dark-sidenav">
+<!-- Left Sidenav -->
+<div class="left-sidenav">
+    <!-- LOGO -->
+    <div class="brand">
+        <a href="dashboard.html" class="logo">
+                    <span>
+                        <img src="assets/images/logo-sm.png" alt="logo-small" class="logo-sm">
+                    </span>
+            <span>
+                        <img src="assets/images/logo.png" alt="logo-large" class="logo-lg logo-light">
+                        <img src="assets/images/logo-dark.png" alt="logo-large" class="logo-lg logo-dark">
+                    </span>
+        </a>
+    </div>
+    <!--end logo-->
+    <div class="menu-content h-100" data-simplebar>
+        <ul class="metismenu left-sidenav-menu">
+            <li class="menu-label mt-0">Main</li>
+            <li>
+                <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span onclick="goToDashboard()">Dashboard</span><span
+                        class="menu-arrow"></span></a>
+            </li>
+
+            <li>
+                <a href="javascript: void(0);"><i data-feather="clipboard" class="align-self-center menu-icon"></i><span onclick="goToComplaints()">Complaints</span><span
+                        class="menu-arrow"></span></a>
+            </li>
+            <li>
+                <a href="javascript: void(0);"><i data-feather="clock" class="align-self-center menu-icon"></i><span>Appointments</span><span
+                        class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                <ul class="nav-second-level" aria-expanded="false">
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="goToPublicAppointments()"><i class="ti-control-record"></i>Public</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="goToPoliceAppointments()"><i class="ti-control-record"></i>Police</a></li>
+                </ul>
+            </li>
+
+
+            <li>
+                <a href="javascript: void(0);"><i data-feather="activity" class="align-self-center menu-icon"></i><span onclick="goToSafeMe()">Safe Me</span><span
+                        class="menu-arrow"></span></a>
+            </li>
+            <li>
+                <a href="javascript: void(0);"><i data-feather="users" class="align-self-center menu-icon"></i><span onclick="goToPublicUsers()">Users</span><span
+                        class="menu-arrow"></span></a>
+            </li>
+            <li>
+                <a href="javascript: void(0);"><i data-feather="file-text" class="align-self-center menu-icon"></i><span>Reports</span><span
+                        class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                <ul class="nav-second-level" aria-expanded="false">
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="goToReports()"><i class="ti-control-record"></i>Complaint Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="goToSummaryReports()"><i class="ti-control-record"></i>Summary Reports</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- end left-sidenav-->
+
+<div class="page-wrapper">
+    <!-- Top Bar Start -->
+    <div class="topbar">
+        <!-- Navbar -->
+        <nav class="navbar-custom">
+
+            <ul class="list-unstyled topbar-nav float-end mb-0">
+                <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-bs-toggle="dropdown" href="dashboard.html" role="button"
+                       aria-haspopup="false" aria-expanded="false">
+                        <i data-feather="bell" class="align-self-center topbar-icon"></i>
+                        <span class="badge bg-danger rounded-pill noti-icon-badge" id="safe-me-notification"></span>
+                    </a>
+
+                </li>
+
+                <li class="dropdown">
+                    <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-bs-toggle="dropdown"
+                       href="#" role="button"
+                       aria-haspopup="false" aria-expanded="false">
+                        <span class="ms-1 nav-user-name hidden-sm">Admin</span>
+                        <img src="assets/images/users/user-2.png" alt="profile-user" class="rounded-circle thumb-xs"/>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="index.html" onclick="signOut()"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i>
+                            Logout</a>
+                    </div>
+                </li>
+            </ul><!--end topbar-nav-->
+
+            <ul class="list-unstyled topbar-nav mb-0">
+                <li>
+                    <button class="nav-link button-menu-mobile">
+                        <i data-feather="menu" class="align-self-center topbar-icon"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <!-- end navbar-->
+    </div>
+    <!-- Top Bar End -->
+
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="page-title-box">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="page-title">Add Police Appointments</h4>
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </div><!--end page-title-box-->
+                </div><!--end col-->
+            </div><!--end row-->
+            <!-- end page title end breadcrumb -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-lg-12 ">
+                                    <h4 class="card-title">Please fill all the fields</h4>
+                                </div>
+                            </div>
+
+                        </div><!--end card-header-->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label align-self-center mb-lg-0 text-end">AID</label>
+                                        <div class="col-sm-10">
+                                            <h6 id="last-aid"></h6>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label align-self-center mb-lg-0 text-end">NIC</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" type="text" value="" id="nic">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Telephone</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" type="number" onkeydown="limit(this);" onkeyup="limit(this);" value="" id="telephone">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Schedule Date</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" type="date" id="date">
+                                            <script>
+                                                document.getElementById('pub-sheduled-date').value = new Date().toISOString().substring(0, 10);
+                                                var today = new Date();
+                                                var dd = String(today.getDate()).padStart(2, '0');
+                                                var mm = String(today.getMonth() + 1).padStart(2, '0');
+                                                var yyyy = today.getFullYear();
+
+                                                today = yyyy + '-' + mm + '-' + dd;
+                                                $('#pub-sheduled-date').attr('min',today);
+                                            </script>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-lg-6">
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Email</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" type="email" value="" id="email">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label align-self-center mb-lg-0 text-end">City</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" type="text" value="" id="city">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Type</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-select" id="type" aria-label="Default select example">
+                                                <option selected disabled value="0">Please select type</option>
+                                                <option value="Crimes Against Women & Children">Crimes Against Women & Children</option>
+                                                <option value="Minor Crimes (Less than 50000)">Minor Crimes (Less than 50000)</option>
+                                                <option value="Minor Complaints">Minor Complaints</option>
+                                                <option value="Traffic Violation">Traffic Violation</option>
+                                                <option value="Lost & Found">Lost & Found</option>
+                                                <option value="Crime">Crime</option>
+                                                <option value="Murder">Murder</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12 text-end">
+                                            <button type="submit" onclick="add()" class="btn btn-primary px-4">Add</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div><!--end card-body-->
+                    </div><!--end card-->
+                </div><!--end col-->
+            </div><!--end row-->
+        </div>
+        <footer class="footer text-center text-sm-start">
+            &copy;
+            <script>
+                document.write(new Date().getFullYear())
+            </script>
+            Safe Me <span class="text-muted d-none d-sm-inline-block float-end"></span>
+        </footer><!--end footer-->
+    </div>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-database-compat.js"></script>
+<script src="firebase-JS/firebase-config.js"></script>
+<script src="firebase-JS/firebase-config.local.js"></script>
+<script src="firebase-JS/firebase.js"></script>
+<script src="firebase-JS/addPoliceAppointments.js"></script>
+<script src="firebase-JS/topAndSideNavBar.js"></script>
+
+<!-- jQuery  -->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/metismenu.min.js"></script>
+<script src="assets/js/waves.js"></script>
+<script src="assets/js/feather.min.js"></script>
+
+
+
+
+<!-- App js -->
+<script src="assets/js/app.js"></script>
+</body>
+</html>

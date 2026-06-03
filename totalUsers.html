@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>SafeMe | Total User Report</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.png">
+    <link rel="stylesheet" href="assets/css/report.css">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/metisMenu.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+    <script src="assets/js/reportDownload.js"></script>
+</head>
+
+<body class="dark-sidenav">
+
+<div class="left-sidenav">
+    <!-- LOGO -->
+    <div class="brand">
+        <a href="dashboard.html" class="logo">
+                    <span>
+                        <img src="assets/images/logo-sm.png" alt="logo-small" class="logo-sm">
+                    </span>
+            <span>
+                        <img src="assets/images/logo.png" alt="logo-large" class="logo-lg logo-light">
+                        <img src="assets/images/logo-dark.png" alt="logo-large" class="logo-lg logo-dark">
+                    </span>
+        </a>
+    </div>
+    <!--end logo-->
+    <div class="menu-content h-100" data-simplebar>
+        <ul class="metismenu left-sidenav-menu">
+            <li class="menu-label mt-0">Main</li>
+            <li>
+                <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span
+                        onclick="goToDashboard()">Dashboard</span><span
+                        class="menu-arrow"></span></a>
+            </li>
+
+            <li>
+                <a href="javascript: void(0);"><i data-feather="clipboard" class="align-self-center menu-icon"></i><span
+                        onclick="goToComplaints()">Complaints</span><span
+                        class="menu-arrow"></span></a>
+            </li>
+            <li>
+                <a href="javascript: void(0);"><i data-feather="clock" class="align-self-center menu-icon"></i><span>Appointments</span><span
+                        class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                <ul class="nav-second-level" aria-expanded="false">
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="goToPublicAppointments()"><i
+                            class="ti-control-record"></i>Public</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="goToPoliceAppointments()"><i
+                            class="ti-control-record"></i>Police</a></li>
+                </ul>
+            </li>
+
+
+            <li>
+                <a href="javascript: void(0);"><i data-feather="activity" class="align-self-center menu-icon"></i><span
+                        onclick="goToSafeMe()">Safe Me</span><span
+                        class="menu-arrow"></span></a>
+            </li>
+            <li>
+                <a href="javascript: void(0);"><i data-feather="users" class="align-self-center menu-icon"></i><span
+                        onclick="goToPublicUsers()">Users</span><span
+                        class="menu-arrow"></span></a>
+            </li>
+            <li>
+                <a href="javascript: void(0);"><i data-feather="file-text"
+                                                  class="align-self-center menu-icon"></i><span>Reports</span><span
+                        class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                <ul class="nav-second-level" aria-expanded="false">
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="goToReports()"><i
+                            class="ti-control-record"></i>Complaint Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="goToSummaryReports()"><i
+                            class="ti-control-record"></i>Summary Reports</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="page-wrapper">
+    <div id="report-export-root" class="cs-invoice cs-style1">
+        <div class="cs-invoice_head cs-type1 cs-mb25">
+            <div class="cs-invoice_left">
+                <p class="cs-invoice_number cs-primary_color cs-mb0 cs-f16"><b class="cs-primary_color">Total Complaint
+                    Report</b>
+                </p>
+            </div>
+            <div class="cs-invoice_right cs-text_right">
+                <div class="cs-logo cs-mb5"><img src="assets/images/logo-dark.png" alt="Logo"></div>
+            </div>
+        </div>
+
+        <div class="cs-invoice_head cs-mb10">
+            <div class="cs-invoice">
+                <b class="cs-primary_color">Must Read:</b>
+                <p class="cs-mb8">This is a online summary report generated from our live servers.</p>
+                <div class="justify-content-between">
+                    <ul class="cs-grid_row cs-col_2 ">
+                        <li class="">
+                            <p><b class="cs-primary_color cs-semi_bold">Report Created Date:</b><b><a
+                                    style="margin-left: 10px"
+                                    id="date">date</a></b></p>
+
+                        </li>
+                        <li class="">
+                            <p><b class="cs-primary_color cs-semi_bold">Report Created Time:</b><b><a
+                                    style="margin-left: 10px"
+                                    id="time">time</a></b></p>
+
+                        </li>
+                    </ul>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                    <tr>
+                        <th>NIC</th>
+                        <th>District</th>
+                        <th>City</th>
+                        <th>Name</th>
+                        <th>Contact No</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                    </tr>
+                    </thead>
+                    <tbody id="userSummary_table">
+
+                    <!--GENERATED FROM DB -->
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cs-invoice_btns cs-hide_print">
+                <a id="printBtn" href="javascript:window.print()" class="cs-invoice_btn cs-color1 hidden-print">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+                        <path d="M384 368h24a40.12 40.12 0 0040-40V168a40.12 40.12 0 00-40-40H104a40.12 40.12 0 00-40 40v160a40.12 40.12 0 0040 40h24"
+                              fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/>
+                        <rect x="128" y="240" width="256" height="208" rx="24.32" ry="24.32" fill="none"
+                              stroke="currentColor" stroke-linejoin="round" stroke-width="32"/>
+                        <path d="M384 128v-24a40.12 40.12 0 00-40-40H168a40.12 40.12 0 00-40 40v24" fill="none"
+                              stroke="currentColor" stroke-linejoin="round" stroke-width="32"/>
+                        <circle cx="392" cy="184" r="24"/>
+                    </svg>
+                    <span>Print</span>
+                </a>
+                <button type="button" id="download" class="cs-invoice_btn cs-color2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><title>
+                        Download</title>
+                        <path d="M336 176h40a40 40 0 0140 40v208a40 40 0 01-40 40H136a40 40 0 01-40-40V216a40 40 0 0140-40h40"
+                              fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                              stroke-width="32"/>
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                              stroke-width="32" d="M176 272l80 80 80-80M256 48v288"/>
+                    </svg>
+                    <span>Download</span>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-database-compat.js"></script>
+<script src="firebase-JS/firebase-config.js"></script>
+<script src="firebase-JS/firebase-config.local.js"></script>
+<script src="firebase-JS/firebase.js"></script>
+<script src="firebase-JS/topAndSideNavBar.js"></script>
+<script src="firebase-JS/totalSummaryReport.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/metismenu.min.js"></script>
+<script src="assets/js/waves.js"></script>
+<script src="assets/js/feather.min.js"></script>
+<script src="assets/js/app.js"></script>
+
+
+<script>
+    var dt = new Date();
+    y = dt.getFullYear();
+    m = dt.getMonth() + 1;
+    d = dt.getDate();
+
+    h = dt.getHours();
+    m = dt.getMinutes();
+    s = dt.getSeconds()
+    document.getElementById('time').innerHTML = h + ":" + m + ":" + s;
+</script>
+
+<script>
+    n = new Date();
+    y = n.getFullYear();
+    m = n.getMonth() + 1;
+    d = n.getDate();
+    document.getElementById("date").innerHTML = m + "/" + d + "/" + y;
+
+</script>
+
+
+</body>
+</html>
