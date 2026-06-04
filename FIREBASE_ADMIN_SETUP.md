@@ -80,13 +80,13 @@ If login shows **requests from referer … are blocked**, the **Firebase Web API
 
 Admin uses this key (from `firebase-JS/firebase.js`):
 
-- **API key (admin web):** `AIzaSyD8TcLRnV2ehh_ThVlc88crscgc9_9HfKs` — set in `firebase-JS/firebase-config.js`
+- **API key (admin web):** `AIzaSyCWbI7XXxoW5QYB_MD_YFXtnQOi7yhA-HE` — set in `firebase-JS/firebase-config.js`
 - **Project:** `safe-a67e3`
 
 ### A. Google Cloud — API key referrers (fixes login)
 
 1. [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials?project=safe-a67e3) → project **safe-a67e3**
-2. Open the **Browser key** `AIzaSyD8TcLRnV2ehh_ThVlc88crscgc9_9HfKs`
+2. Open the **Browser key** `AIzaSyCWbI7XXxoW5QYB_MD_YFXtnQOi7yhA-HE`
 3. **Application restrictions** → **HTTP referrers (web sites)**
 4. Add **exactly** (for default local server on port 8080):
 
@@ -114,7 +114,21 @@ chmod +x scripts/allow-localhost-firebase.sh
 2. **Authentication** → **Settings** → **Authorized domains**
 3. Ensure **`localhost`** is listed (add it if missing)
 
-## 5. Run admin locally
+## 5. Deploy to Firebase Hosting (optional)
+
+`firebase init` is already done in this repo (`firebase.json`, `.firebaserc` → project **safe-a67e3**).
+
+```bash
+npm install
+npm run firebase:login    # opens browser — sign in with Google account that owns safe-a67e3
+npm run firebase:deploy   # publishes static admin panel to Hosting
+```
+
+Or globally: `npm install -g firebase-tools`, then `firebase login` and `firebase deploy --only hosting`.
+
+After deploy, add your Hosting URL (e.g. `https://safe-a67e3.web.app/*`) as an **HTTP referrer** on API key `AIzaSyCWbI7XXxoW5QYB_MD_YFXtnQOi7yhA-HE`, and add the domain under **Authentication → Authorized domains**.
+
+## 6. Run admin locally
 
 ```bash
 python3 -m http.server 8080
@@ -123,11 +137,11 @@ python3 -m http.server 8080
 
 Open http://localhost:8080/index.html and sign in with `admin@safeme.app` / `SafeMe123`.
 
-## 6. Optional: separate police account
+## 7. Optional: separate police account
 
 You can add another Firebase user (e.g. `police@safeme.app`) with its own password. Remove the default email placeholder in `index.html` if you prefer not to pre-fill `admin@safeme.app`.
 
-## Google Maps (complaint / SafeMe detail pages)
+## 8. Google Maps (complaint / SafeMe detail pages)
 
 Admin maps use `assets/js/google-maps-config.js` (default key matches the mobile Android app).
 
@@ -142,6 +156,7 @@ Admin maps use `assets/js/google-maps-config.js` (default key matches the mobile
 
 | Symptom | Fix |
 |---------|-----|
+| `auth/api-key-expired.-please-renew-the-api-key.` | Regenerate or create a new Browser API key in [Google Cloud Credentials](https://console.cloud.google.com/apis/credentials?project=safe-a67e3) or copy `apiKey` from Firebase → **safe-a67e3** → Project settings → Your apps (web). Update `firebase-JS/firebase-config.js` (or `firebase-config.local.js`), re-add localhost referrers + Identity Toolkit API, wait 2–5 min, hard-refresh |
 | `auth/requests-from-referer-…-are-blocked` | Add your dev URL as HTTP referrer on Firebase browser API key — **§4** above |
 | Empty dashboard | Wrong project — confirm `firebase-JS/firebase.js` has `projectId: "safe-a67e3"` |
 | `auth/user-not-found` | Create `admin@safeme.app` in Authentication |

@@ -14,7 +14,7 @@ import { dirname, join } from "path";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const PORT = 8787;
-const API_KEY = "AIzaSyD8TcLRnV2ehh_ThVlc88crscgc9_9HfKs";
+const API_KEY = "AIzaSyCWbI7XXxoW5QYB_MD_YFXtnQOi7yhA-HE";
 const SERVICE_ACCOUNT_PATH = join(ROOT, "firebase-service-account.json");
 
 let serviceAccount = null;

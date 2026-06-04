@@ -4,7 +4,7 @@
 set -euo pipefail
 
 PROJECT_ID="safe-a67e3"
-API_KEY_STRING="AIzaSyD8TcLRnV2ehh_ThVlc88crscgc9_9HfKs"
+API_KEY_STRING="AIzaSyCWbI7XXxoW5QYB_MD_YFXtnQOi7yhA-HE"
 REFERRERS=(
   "http://localhost:8080/*"
   "http://127.0.0.1:8080/*"

@@ -6,16 +6,19 @@
   "scripts": {
     "start": "npx --yes serve . -l 8080",
     "dev": "python3 -m http.server 8080",
-    "auth-proxy": "node scripts/local-auth-proxy.mjs"
+    "auth-proxy": "node scripts/local-auth-proxy.mjs",
+    "firebase:login": "firebase login",
+    "firebase:deploy": "firebase deploy --only hosting"
   },
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
+    "firebase-tools": "^14.0.0",
     "serve": "^14.2.4"
   },
   "dependencies": {
-    "firebase": "12.14.0",
+    "firebase": "^12.14.0",
     "firebase-admin": "^13.0.0"
   }
 }
