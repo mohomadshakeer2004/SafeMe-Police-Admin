@@ -1,4 +1,5 @@
 firebase-service-account.json
+assets/js/google-maps-config.local.js
 .firebase/
 node_modules/
 .DS_Store

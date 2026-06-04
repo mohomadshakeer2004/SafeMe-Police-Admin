@@ -64,7 +64,7 @@ function safemeShowApiKeyExpiredError(fromCacheCheck) {
             "<li>Under <strong>Your apps</strong>, select the web app (or add one) and copy the new <code>apiKey</code></li>" +
             "<li>Or <a href='https://console.cloud.google.com/apis/credentials?project=safe-a67e3' target='_blank' rel='noopener'>Google Cloud → Credentials</a> → create/regenerate a <strong>Browser</strong> API key</li>" +
             "<li>Paste into <code>firebase-config.js</code> or <code>firebase-config.local.js</code> (see <code>firebase-config.local.example.js</code>)</li>" +
-            "<li>Add HTTP referrers: <code>http://localhost:8080/*</code>, <code>http://127.0.0.1:8080/*</code></li>" +
+            "<li>Add HTTP referrers (one per row): <code>http://localhost/*</code> and <code>http://127.0.0.1/*</code></li>" +
             "<li>Enable API restrictions: <strong>Identity Toolkit API</strong> (Firebase Auth)</li>" +
             "</ol>",
         confirmButtonText: "Open Firebase settings",

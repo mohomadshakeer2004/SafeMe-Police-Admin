@@ -23,3 +23,10 @@
 .safeme-map-wrap .safeme-map-details p {
     margin: 0;
 }
+
+.safeme-map-wrap .safeme-map-embed {
+    flex: 1 1 280px;
+    min-height: 280px;
+    width: 100%;
+    border: 0;
+}

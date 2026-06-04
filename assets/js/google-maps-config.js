@@ -1,13 +1,19 @@
 /**
- * Google Maps JavaScript API (not the Firebase apiKey).
+ * Google Maps JavaScript API — use the safe-a67e3 *browser* key (same project as Firebase web).
+ * Do not use the old Android-only key here; browsers trigger gm_authFailure.
  *
- * 1. Google Cloud Console → APIs & Services → Enable "Maps JavaScript API"
- * 2. Credentials → API key → restrict HTTP referrers (localhost, your domain)
- * 3. Optional: Map Management → Create map ID → set SAFEME_GOOGLE_MAPS_MAP_ID below
+ * Google Cloud (project safe-a67e3) → Credentials → this key:
+ *   - HTTP referrers (one per row): http://localhost/* , http://127.0.0.1/*
+ *   - API restrictions: Maps JavaScript API (+ Identity Toolkit if shared with Firebase)
  *
- * See GOOGLE_MAPS_SETUP.md for ApiNotActivatedMapError and billing.
+ * APIs & Services → Library → enable "Maps JavaScript API" + billing on the project.
+ * See GOOGLE_MAPS_SETUP.md
  */
-window.SAFEME_GOOGLE_MAPS_API_KEY = "AIzaSyAKDXmnZdPRX6NkJKTmthH1CuD8leQhNOY";
+window.SAFEME_GOOGLE_MAPS_API_KEY = "AIzaSyCWbI7XXxoW5QYB_MD_YFXtnQOi7yhA-HE";
 
-/** Use DEMO_MAP_ID for local dev; replace with your Map ID for production. */
+/** DEMO_MAP_ID works for local dev; create a Map ID in Cloud Console for production. */
 window.SAFEME_GOOGLE_MAPS_MAP_ID = "DEMO_MAP_ID";
+
+if (window.SAFEME_GOOGLE_MAPS_CONFIG_OVERRIDE) {
+    Object.assign(window, window.SAFEME_GOOGLE_MAPS_CONFIG_OVERRIDE);
+}

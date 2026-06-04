@@ -5,6 +5,10 @@
     window.SAFEME_MAP_INIT_QUEUE = window.SAFEME_MAP_INIT_QUEUE || [];
 
     window.safemeQueueMapInit = function (fn) {
+        if (window.SAFEME_MAPS_AUTH_FAILED) {
+            fn();
+            return;
+        }
         if (
             typeof window.google !== "undefined" &&
             window.google.maps &&
@@ -28,12 +32,13 @@
     };
 
     window.gm_authFailure = function () {
-        document.querySelectorAll(".gmaps").forEach(function (el) {
-            el.innerHTML =
-                '<p class="text-danger p-3 mb-0"><strong>Google Maps auth failed.</strong> ' +
-                "Check API key restrictions and that <strong>Maps JavaScript API</strong> is enabled. " +
-                'See <a href="GOOGLE_MAPS_SETUP.md" target="_blank" rel="noopener">GOOGLE_MAPS_SETUP.md</a>.</p>';
-        });
+        window.SAFEME_MAPS_AUTH_FAILED = true;
+        console.warn(
+            "[SafeMe Maps] gm_authFailure — origin:",
+            window.location.origin,
+            "— using embed fallback. Enable Maps JavaScript API on your browser key in safe-a67e3."
+        );
+        window.safemeOnGoogleMapsReady();
     };
 
     var key = window.SAFEME_GOOGLE_MAPS_API_KEY;
@@ -44,6 +49,13 @@
         });
         return;
     }
+
+    console.info(
+        "[SafeMe Maps] Loading API. Page origin:",
+        window.location.origin,
+        "| Key:",
+        String(key).slice(0, 10) + "…"
+    );
 
     if (document.querySelector('script[data-safeme-maps="1"]')) {
         return;
@@ -57,10 +69,9 @@
         encodeURIComponent(key) +
         "&loading=async&callback=safemeOnGoogleMapsReady";
     script.onerror = function () {
-        document.querySelectorAll(".gmaps").forEach(function (el) {
-            el.innerHTML =
-                '<p class="text-danger p-3 mb-0">Google Maps script failed to load. Check network, API key, and billing.</p>';
-        });
+        window.SAFEME_MAPS_AUTH_FAILED = true;
+        console.error("[SafeMe Maps] Script failed to load.");
+        window.safemeOnGoogleMapsReady();
     };
     document.head.appendChild(script);
 })();

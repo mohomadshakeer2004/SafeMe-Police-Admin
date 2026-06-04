@@ -29,9 +29,24 @@ In **APIs & Services** → **Credentials** → your browser key:
 - **API restrictions**: restrict to **Maps JavaScript API** (and optionally Geocoding if you add it later).
 
 Admin config file: `assets/js/google-maps-config.js`  
-Current key (Android app): `AIzaSyAKDXmnZdPRX6NkJKTmthH1CuD8leQhNOY`
+Uses the **safe-a67e3 browser key** (same as Firebase web: `AIzaSyCWbI7XXxoW5QYB_MD_YFXtnQOi7yhA-HE`).
 
-Do **not** use the Firebase `apiKey` from `firebase_options.dart` for Maps — that key is for Firebase services only.
+Do **not** use the old **Android-only** Maps key in the admin panel — browsers show `gm_authFailure` / “Google Maps auth failed”.
+
+On that browser key in [Credentials (safe-a67e3)](https://console.cloud.google.com/apis/credentials?project=safe-a67e3):
+
+- **HTTP referrers** (one per **+ Add** row, no commas): `http://localhost/*`, `http://127.0.0.1/*`, plus your Hosting URL e.g. `https://safe-a67e3.web.app/*`
+- **API restrictions:** click **Restrict key** → **Select APIs** → add at least:
+  - **Maps JavaScript API** ← required or you get `gm_authFailure`
+  - **Identity Toolkit API** (Firebase login on the same key)
+
+If the key is restricted to Firebase APIs only, Maps will always fail auth even with referrers correct.
+
+**Billing:** [Billing](https://console.cloud.google.com/billing?project=safe-a67e3) must be linked to the project.
+
+### Admin fallback (no API)
+
+If Cloud setup is not finished, map pages still show an **embedded Google Maps preview** (iframe) so location is visible. Fix Cloud to get the full interactive map + marker.
 
 ## Marker deprecation warning
 

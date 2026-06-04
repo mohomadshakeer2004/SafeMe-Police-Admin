@@ -69,7 +69,7 @@ The admin panel uses a **dedicated web API key** in `firebase-JS/firebase-config
 
 | Setting | Value |
 |---------|--------|
-| Application restrictions | HTTP referrers: `http://localhost:8080/*`, `http://127.0.0.1:8080/*`, your production admin URL |
+| Application restrictions | HTTP referrers (one per row): `http://localhost/*`, `http://127.0.0.1/*`, your production admin URL |
 | API restrictions | Identity Toolkit API, Firebase Installations API (or Firebase-related APIs only) |
 
 Do not commit service account JSON or rotate keys if this repo is public.
@@ -88,14 +88,19 @@ Admin uses this key (from `firebase-JS/firebase.js`):
 1. [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials?project=safe-a67e3) → project **safe-a67e3**
 2. Open the **Browser key** `AIzaSyCWbI7XXxoW5QYB_MD_YFXtnQOi7yhA-HE`
 3. **Application restrictions** → **HTTP referrers (web sites)**
-4. Add **exactly** (for default local server on port 8080):
+4. Click **+ Add** for **each** line below (one referrer per row — **do not** paste comma-separated text; that causes **Invalid referrer path**):
 
-   ```
-   http://localhost:8080/*
-   http://127.0.0.1:8080/*
-   ```
+   | Add separately |
+   |----------------|
+   | `http://localhost/*` |
+   | `http://127.0.0.1/*` |
 
-   If you use another port, add `http://localhost:YOUR_PORT/*` (must match the URL in the browser).
+   Optional (if the UI accepts port-specific entries):
+
+   | `http://localhost:8080/*` |
+   | `http://127.0.0.1:8080/*` |
+
+   If `127.0.0.1:8080` is rejected, use only the first two rows (`http://localhost/*` covers any port including 8080).
 
 5. **Save** and wait **2–5 minutes**, then hard-refresh (`Cmd+Shift+R`).
 
@@ -143,14 +148,13 @@ You can add another Firebase user (e.g. `police@safeme.app`) with its own passwo
 
 ## 8. Google Maps (complaint / SafeMe detail pages)
 
-Admin maps use `assets/js/google-maps-config.js` (default key matches the mobile Android app).
+Admin maps use `assets/js/google-maps-config.js` with the **safe-a67e3 browser API key** (not the Android app key).
 
-1. [Google Cloud Console](https://console.cloud.google.com/) → same project as your Maps key
-2. Enable **Maps JavaScript API**
-3. Under **Credentials**, allow HTTP referrers: `http://localhost:*`, `http://127.0.0.1:*`, and your production domain
-4. Replace `SAFEME_GOOGLE_MAPS_API_KEY` if you use a dedicated browser key
+1. [Enable Maps JavaScript API](https://console.cloud.google.com/apis/library/maps-backend.googleapis.com?project=safe-a67e3) on project **safe-a67e3**
+2. [Credentials](https://console.cloud.google.com/apis/credentials?project=safe-a67e3) → browser key `AIzaSyCWbI7XXxoW5QYB_MD_YFXtnQOi7yhA-HE` → HTTP referrers + **Maps JavaScript API** in API restrictions
+3. Billing enabled on the Google Cloud project (Maps requires it)
 
-`ExpiredKeyMapError` means the old admin key expired — update `google-maps-config.js`.
+See [GOOGLE_MAPS_SETUP.md](GOOGLE_MAPS_SETUP.md). Hard-refresh map pages after Cloud changes.
 
 ## Troubleshooting
 
@@ -158,6 +162,7 @@ Admin maps use `assets/js/google-maps-config.js` (default key matches the mobile
 |---------|-----|
 | `auth/api-key-expired.-please-renew-the-api-key.` | Regenerate or create a new Browser API key in [Google Cloud Credentials](https://console.cloud.google.com/apis/credentials?project=safe-a67e3) or copy `apiKey` from Firebase → **safe-a67e3** → Project settings → Your apps (web). Update `firebase-JS/firebase-config.js` (or `firebase-config.local.js`), re-add localhost referrers + Identity Toolkit API, wait 2–5 min, hard-refresh |
 | `auth/requests-from-referer-…-are-blocked` | Add your dev URL as HTTP referrer on Firebase browser API key — **§4** above |
+| **Invalid referrer path** (Google Cloud UI) | Add **one** referrer per **+ Add** click; never `http://localhost:8080/*, http://127.0.0.1:8080/*` on one line. Use `http://localhost/*` and `http://127.0.0.1/*` |
 | Empty dashboard | Wrong project — confirm `firebase-JS/firebase.js` has `projectId: "safe-a67e3"` |
 | `auth/user-not-found` | Create `admin@safeme.app` in Authentication |
 | Permission denied on RTDB | Sign in first; check Database rules require `auth != null` |
