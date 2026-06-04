@@ -1,0 +1,16 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "package.json",
+      "package-lock.json",
+      "firebase-service-account.json",
+      "firebase-JS/firebase-config.local.js",
+      "scripts/**",
+      ".vscode/**"
+    ]
+  }
+}

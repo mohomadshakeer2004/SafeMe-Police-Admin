@@ -30,7 +30,6 @@ function generateAppointments(ProfileImage, Name, NIC, ContactNo, AID, City, Req
               <td><span class="badge badge-soft-primary">${Status}</span></td>
               <td class="text-end">
               <span onclick="viewMore('${AID}')">
-<!--<i class="las la-pen text-secondary font-18"></i>-->
                   <button class="btn btn-primary btn-view"  type="button" text-secondary " >View</button></span>
                   <span style="cursor: pointer" onclick="makePending('${AID}')"><i class="las ti-time text-secondary icon"></i></span>
                    <span style="cursor: pointer" onclick="deleteAppointments('${AID}')"><i class="las la-trash-alt text-secondary icon"></i></span>
@@ -44,33 +43,29 @@ function showAppointments(cards) {
     safemeDom.renderRows(cardClass, cards);
 }
 
+function rowToCard(row) {
+    return generateAppointments(
+        row.ProfileImage,
+        row.Name,
+        row.NIC,
+        row.Mobile,
+        row.AID,
+        row.City,
+        row.RequestedDate,
+        row.ScheduledDate
+    );
+}
+
 async function fetchAllAppointmentsAwait() {
-    var cards = []
-
-    var task = await firebase.database().ref('Appointments/PublicAppointments').once('value', function (snapshot) {
-        snapshot.forEach(
-            function (ChildSnapshot) {
-                let ProfileImage = ChildSnapshot.val().ProfileImage;
-                let Name = ChildSnapshot.val().Name;
-                let NIC = ChildSnapshot.val().NIC;
-                let ContactNo = ChildSnapshot.val().Mobile;
-                let AID = ChildSnapshot.val().AID;
-                let City = ChildSnapshot.val().City;
-                let RequestedDate = ChildSnapshot.val().RequestedDate;
-                let Status = ChildSnapshot.val().ScheduledDate;
-
-                cards.push(generateAppointments(ProfileImage, Name, NIC, ContactNo, AID, City, RequestedDate, Status));
-            }
-        );
-    });
-    return cards
+    var rows = await SafeMeAppointments.fetchAllPublicAppointmentsMerged();
+    return rows.map(rowToCard);
 }
 
 async function fetchAllAppointments() {
     var data = await fetchAllAppointmentsAwait()
     showAppointments(data)
 }
-/*******************************Delete Complaint *************************************** */
+
 function deleteAppointments(AID) {
     Swal.fire({
         title: 'Are you sure you want to delete this Appointment from database?',
@@ -80,21 +75,19 @@ function deleteAppointments(AID) {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
+    }).then(async (result) => {
         if (result.isConfirmed) {
-            // Delete Appointment!
-            var db = firebase.database();
-            var ref = db.ref();
-            var survey = db.ref("Appointments/PublicAppointments");
-            survey.child(AID).remove();
-            location.reload();
+            try {
+                await SafeMeAppointments.deletePublicAppointmentEverywhere(AID);
+                location.reload();
+            } catch (e) {
+                console.error(e);
+                Swal.fire({ icon: 'error', text: 'Delete failed.' });
+            }
         }
     })
-
 }
 
-
-/*******************************make a Complaint pending*************************************** */
 function makePending(AID) {
     Swal.fire({
         title: 'Are you sure you want to make this Appointment pending?',
@@ -104,95 +97,69 @@ function makePending(AID) {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, make it pending!'
-    }).then((result) => {
+    }).then(async (result) => {
         if (result.isConfirmed) {
-            firebase.database().ref('Appointments/PublicAppointments/' + AID).update({
-                ScheduledDate: "Pending"
-            });
-            location.reload();
+            try {
+                await SafeMeAppointments.updatePublicAppointmentEverywhere(AID, {
+                    ScheduledDate: 'Pending',
+                });
+                location.reload();
+            } catch (e) {
+                console.error(e);
+                Swal.fire({ icon: 'error', text: 'Update failed.' });
+            }
         }
     })
-
 }
 
-
-/*******************************View More  *************************************** */
 function viewMore(AID) {
     localStorage.setItem("publicAID", AID);
     location.replace("publicAppointmentsViewAndSchedule.html");
 }
 
-
-/**Search function**********************************************************************************/
 safemeDom.bindSearch(function (searchString) {
     search(searchString);
 });
 
 async function searchAwait(searchString) {
-    var cards = []
-
-    var task = await firebase.database().ref('Appointments/PublicAppointments').once('value', function (snapshot) {
-        snapshot.forEach(
-            function (ChildSnapshot) {
-                let ProfileImage = ChildSnapshot.val().ProfileImage;
-                let Name = ChildSnapshot.val().Name;
-                let NIC = ChildSnapshot.val().NIC;
-                let ContactNo = ChildSnapshot.val().Mobile;
-                let AID = ChildSnapshot.val().AID;
-                let City = ChildSnapshot.val().City;
-                let RequestedDate = ChildSnapshot.val().RequestedDate;
-                let Status = ChildSnapshot.val().ScheduledDate;
-
-                if (Name.toLowerCase().includes(searchString) | NIC.toLowerCase().includes(searchString) |
-                    City.toLowerCase().includes(searchString)) {
-                    cards.push(generateAppointments(ProfileImage, Name, NIC, ContactNo, AID, City, RequestedDate, Status));
-                }
-            }
-        );
-    });
-    return cards
+    var rows = await SafeMeAppointments.fetchAllPublicAppointmentsMerged();
+    return rows
+        .filter(function (row) {
+            var name = (row.Name || '').toLowerCase();
+            var nic = (row.NIC || '').toLowerCase();
+            var city = (row.City || '').toLowerCase();
+            return (
+                name.includes(searchString) ||
+                nic.includes(searchString) ||
+                city.includes(searchString)
+            );
+        })
+        .map(rowToCard);
 }
 
 async function search(searchString) {
-
     var data = await searchAwait(searchString);
     showAppointments(data)
 }
 
-/*******************************Filter Function *************************************** */
 function updateFilter() {
     filtervalue = safemeDom.filterValue();
 }
 
 async function filterAwait() {
-    var cards4 = []
-
-    var task = await firebase.database().ref('Appointments/PublicAppointments').once('value', function (snapshot) {
-        snapshot.forEach(
-            function (ChildSnapshot) {
-                let ProfileImage = ChildSnapshot.val().ProfileImage;
-                let Name = ChildSnapshot.val().Name;
-                let NIC = ChildSnapshot.val().NIC;
-                let ContactNo = ChildSnapshot.val().Mobile;
-                let AID = ChildSnapshot.val().AID;
-                let City = ChildSnapshot.val().City;
-                let RequestedDate = ChildSnapshot.val().RequestedDate;
-                let Status = ChildSnapshot.val().ScheduledDate;
-                if (Status.includes(filtervalue)) {
-                    cards4.push(generateAppointments(ProfileImage, Name, NIC, ContactNo, AID, City, RequestedDate, Status));
-                } else if (filtervalue === "All") {
-                    cards4.push(generateAppointments(ProfileImage, Name, NIC, ContactNo, AID, City, RequestedDate, Status));
-                }
-
+    var rows = await SafeMeAppointments.fetchAllPublicAppointmentsMerged();
+    return rows
+        .filter(function (row) {
+            var status = row.ScheduledDate || '';
+            if (filtervalue === 'All') {
+                return true;
             }
-        );
-
-    });
-    return cards4
+            return status.includes(filtervalue);
+        })
+        .map(rowToCard);
 }
 
 async function filter() {
-
     var data4 = await filterAwait();
     showAppointments(data4);
 }

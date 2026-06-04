@@ -39,6 +39,16 @@ Mobile app docs use:
 
 The admin panel must be **signed in** (same as mobile) to read/write.
 
+## 3b. Complaints
+
+Mobile and admin both use:
+
+`Complaints/All/{CID}`
+
+Admin JS (`firebase-JS/complaint-data.js`) reads only that path (20s timeout). Lists load after Firebase sign-in.
+
+You may delete unused `Complaints/Records` nodes in the Firebase Console if they were created during testing.
+
 ## 4. Fix localhost login (`auth/requests-from-referer-...-are-blocked`)
 
 Pick **one** option.

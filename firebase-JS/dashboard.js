@@ -56,13 +56,11 @@ function showPendingPublicAppointments(cards) {
 
 async function fetchAllPendingComplaintsAwait() {
     var cards = [];
-    await firebase.database().ref('Complaints/All').once('value', function (snapshot) {
-        snapshot.forEach(function (ChildSnapshot) {
-            var row = ChildSnapshot.val();
-            if (row && row.Status === 'Pending') {
-                cards.push(PendingComplaintFunction(row.CID, row.Name, row.NIC, row.Date, row.City, row.Status));
-            }
-        });
+    var rows = await SafeMeComplaints.fetchAllComplaintsMerged();
+    rows.forEach(function (row) {
+        if (row && row.Status === 'Pending') {
+            cards.push(PendingComplaintFunction(row.CID, row.Name, row.NIC, row.Date, row.City, row.Status));
+        }
     });
     return cards;
 }
@@ -92,6 +90,15 @@ async function fetchPendingPublicAppointment() {
     firebase.auth().onAuthStateChanged((user) => {
         if (!user) {
             window.location.replace('index.html');
+            return;
+        }
+        if (cardClass) {
+            fetchPendingComplaints().catch(function (e) {
+                console.error('fetchPendingComplaints failed:', e);
+            });
+        }
+        if (cardClass2) {
+            fetchPendingPublicAppointment();
         }
     });
 })();
@@ -104,9 +111,4 @@ function signOut() {
     });
 }
 
-if (cardClass) {
-    fetchPendingComplaints();
-}
-if (cardClass2) {
-    fetchPendingPublicAppointment();
-}
+/* pending tables load in onAuthStateChanged */

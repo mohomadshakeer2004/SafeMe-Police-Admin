@@ -40,33 +40,14 @@ function showComplaintsSummry(cards) {
 }
 
 async function fetchAllComplaintsSummryAwait() {
-    var cards = []
-
-    var task = await firebase.database().ref('Complaints/All').once('value', function (snapshot) {
-        snapshot.forEach(function (ChildSnapshot) {
-            let ProfileImage = ChildSnapshot.val().ProfileImage;
-            let Name = ChildSnapshot.val().Name;
-            let NIC = ChildSnapshot.val().NIC;
-            let ContactNo = ChildSnapshot.val().Mobile;
-            let CID = ChildSnapshot.val().CID;
-            let City = ChildSnapshot.val().City;
-            let Status = ChildSnapshot.val().Status;
-            let Address = ChildSnapshot.val().Address;
-            let Date = ChildSnapshot.val().Date;
-            let Description = ChildSnapshot.val().Description;
-            let District = ChildSnapshot.val().District;
-            let Email = ChildSnapshot.val().Email;
-            let Image1 = ChildSnapshot.val().Image1;
-            let Image2 = ChildSnapshot.val().Image2;
-            let Latitude = ChildSnapshot.val().Latitude;
-            let Longitude = ChildSnapshot.val().Longitude;
-            let Reason = ChildSnapshot.val().Reason;
-            let Type = ChildSnapshot.val().Type;
-
-            cards.push(generateComplaintsSummary(ProfileImage, Name, NIC, ContactNo, CID, City, Status, Address, Date, Description, District, Email, Image1, Image2, Longitude, Latitude, Reason, Type));
-        });
+    var rows = await SafeMeComplaints.fetchAllComplaintsMerged();
+    return rows.map(function (row) {
+        return generateComplaintsSummary(
+            row.ProfileImage, row.Name, row.NIC, row.Mobile, row.CID, row.City, row.Status,
+            row.Address, row.Date, row.Description, row.District, row.Email, row.Image1, row.Image2,
+            row.Longitude, row.Latitude, row.Reason, row.Type
+        );
     });
-    return cards
 }
 
 async function fetchAllComplaintsSummry() {
@@ -160,25 +141,19 @@ function showAppointments(cards) {
 }
 
 async function fetchAllAppointmentsAwait() {
-    var cards = []
-
-    var task = await firebase.database().ref('Appointments/PublicAppointments').once('value', function (snapshot) {
-        snapshot.forEach(
-            function (ChildSnapshot) {
-                let ProfileImage = ChildSnapshot.val().ProfileImage;
-                let Name = ChildSnapshot.val().Name;
-                let NIC = ChildSnapshot.val().NIC;
-                let ContactNo = ChildSnapshot.val().Mobile;
-                let AID = ChildSnapshot.val().AID;
-                let City = ChildSnapshot.val().City;
-                let RequestedDate = ChildSnapshot.val().RequestedDate;
-                let Status = ChildSnapshot.val().ScheduledDate;
-
-                cards.push(generateAppointments(ProfileImage, Name, NIC, ContactNo, AID, City, RequestedDate, Status));
-            }
+    var rows = await SafeMeAppointments.fetchAllPublicAppointmentsMerged();
+    return rows.map(function (row) {
+        return generateAppointments(
+            row.ProfileImage,
+            row.Name,
+            row.NIC,
+            row.Mobile,
+            row.AID,
+            row.City,
+            row.RequestedDate,
+            row.ScheduledDate
         );
     });
-    return cards
 }
 
 async function fetchAllAppointments() {

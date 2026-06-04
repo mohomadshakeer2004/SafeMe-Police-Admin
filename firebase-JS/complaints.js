@@ -2,10 +2,12 @@
 (function(){
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            // User is signed in, see docs for a list of available properties
-            // ...
+            if (cardClass) {
+                fetchAllComplaints().catch(function (e) {
+                    console.error('fetchAllComplaints failed:', e);
+                });
+            }
         } else {
-            // User is signed out
             window.location.replace("index.html");
         }
     });
@@ -19,26 +21,32 @@ var filtervalue = safemeDom.filterValue();
 
 /**Generate Complaints function******************************************************************** */
 function generateComplaints(ProfileImage, Name, NIC, ContactNo, CID, City, Status, Address, Date, Description, District, Email, Image1, Image2, Longitude, Latitude, Reason, Type) {
+    var safeNic = (NIC || '').replace(/'/g, "\\'");
+    var img = ProfileImage && String(ProfileImage).trim() ? ProfileImage : 'assets/images/users/user-1.jpg';
     var htmlCard = `
           <tr>
-                <td><img src=${ProfileImage} alt="" class="rounded-circle thumb-xs me-1">${Name}</td>
+                <td><img src="${img}" alt="" class="rounded-circle thumb-xs me-1">${Name || ''}</td>
                 <td>${NIC}</td>
                 <td>${ContactNo}</td>
                 <td>${CID}</td>
                 <td>${City}</td>
                 <td><span class="badge badge-soft-primary">${Status}</span></td>
                 <td class="text-end">
-                     <a href="editAndViewComplaints.html" onclick="viewMore('${CID}','${Date}','${Longitude}','${Latitude}','${Type}')">
-<!--                     <i class="las la-pen text-secondary font-18"></i></a>-->
-                     
+                     <a href="editAndViewComplaints.html" onclick="viewMore('${CID}','${Date}','${Longitude}','${Latitude}','${Type}','${safeNic}')">
                        <button class="btn btn-primary btn-view"  type="button" text-secondary font-18" >View</button></a>
-                     
-                     
-                     <a href="#" onclick="deleteComplaints('${CID}')"><i class="las la-trash-alt text-secondary icon "></i></a>
+                     <a href="#" onclick="deleteComplaints('${CID}','${safeNic}')"><i class="las la-trash-alt text-secondary icon "></i></a>
                 </td>
           </tr>
            `
     return htmlCard
+}
+
+function rowToCard(row) {
+    return generateComplaints(
+        row.ProfileImage, row.Name, row.NIC, row.Mobile, row.CID, row.City, row.Status,
+        row.Address, row.Date, row.Description, row.District, row.Email, row.Image1, row.Image2,
+        row.Longitude, row.Latitude, row.Reason, row.Type
+    );
 }
 
 function showComplaints(cards) {
@@ -46,36 +54,8 @@ function showComplaints(cards) {
 }
 
 async function fetchAllComplaintsAwait() {
-    var cards = []
-
-    var task = await firebase.database().ref('Complaints/All').once('value', function (snapshot) {
-        snapshot.forEach(
-            function (ChildSnapshot) {
-                let ProfileImage = ChildSnapshot.val().ProfileImage;
-                let Name = ChildSnapshot.val().Name;
-                let NIC = ChildSnapshot.val().NIC;
-                let ContactNo = ChildSnapshot.val().Mobile;
-                let CID = ChildSnapshot.val().CID;
-                let City = ChildSnapshot.val().City;
-                let Status = ChildSnapshot.val().Status;
-                let Address = ChildSnapshot.val().Address;
-                let Date = ChildSnapshot.val().Date;
-                let Description = ChildSnapshot.val().Description;
-                let District = ChildSnapshot.val().District;
-                let Email = ChildSnapshot.val().Email;
-                let Image1 = ChildSnapshot.val().Image1;
-                let Image2 = ChildSnapshot.val().Image2;
-                let Latitude = ChildSnapshot.val().Latitude;
-                let Longitude = ChildSnapshot.val().Longitude;
-                let Reason = ChildSnapshot.val().Reason;
-                let Type = ChildSnapshot.val().Type;
-
-                cards.push(generateComplaints(ProfileImage, Name, NIC, ContactNo, CID, City, Status, Address, Date, Description,
-                    District, Email, Image1, Image2, Longitude, Latitude, Reason, Type));
-            }
-        );
-    });
-    return cards
+    var rows = await SafeMeComplaints.fetchAllComplaintsMerged();
+    return rows.map(rowToCard);
 }
 
 async function fetchAllComplaints() {
@@ -85,7 +65,7 @@ async function fetchAllComplaints() {
 
 
 /*******************************Delete Complaint *************************************** */
-function deleteComplaints(CID) {
+function deleteComplaints(CID, NIC) {
     Swal.fire({
         title: 'Are you sure you want to delete this complaint from database?',
         text: "You won't be able to revert this!",
@@ -94,14 +74,15 @@ function deleteComplaints(CID) {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
+    }).then(async (result) => {
         if (result.isConfirmed) {
-            // Delete Complaint!
-            var db = firebase.database();
-            var ref = db.ref();
-            var survey = db.ref("Complaints/All");
-            survey.child(CID).remove();
-            location.reload();
+            try {
+                await SafeMeComplaints.deleteComplaintEverywhere(CID);
+                location.reload();
+            } catch (e) {
+                console.error(e);
+                Swal.fire({ icon: 'error', text: 'Delete failed.' });
+            }
         }
     })
 
@@ -114,39 +95,16 @@ safemeDom.bindSearch(function (searchString) {
 });
 
 async function searchAwait(searchString) {
-    var cards = []
-
-    var task = await firebase.database().ref('Complaints/All').once('value', function (snapshot) {
-        snapshot.forEach(
-            function (ChildSnapshot) {
-                let ProfileImage = ChildSnapshot.val().ProfileImage;
-                let Name = ChildSnapshot.val().Name;
-                let NIC = ChildSnapshot.val().NIC;
-                let ContactNo = ChildSnapshot.val().Mobile;
-                let CID = ChildSnapshot.val().CID;
-                let City = ChildSnapshot.val().City;
-                let Status = ChildSnapshot.val().Status;
-                let Address = ChildSnapshot.val().Address;
-                let Date = ChildSnapshot.val().Date;
-                let Description = ChildSnapshot.val().Description;
-                let District = ChildSnapshot.val().District;
-                let Email = ChildSnapshot.val().Email;
-                let Image1 = ChildSnapshot.val().Image1;
-                let Image2 = ChildSnapshot.val().Image2;
-                let Latitude = ChildSnapshot.val().Latitude;
-                let Longitude = ChildSnapshot.val().Longitude;
-                let Reason = ChildSnapshot.val().Reason;
-                let Type = ChildSnapshot.val().Type;
-
-                 if (Name.toLowerCase().includes(searchString) | NIC.toLowerCase().includes(searchString) |
-                    City.toLowerCase().includes(searchString)) {
-                    cards.push(generateComplaints(ProfileImage, Name, NIC, ContactNo, CID, City, Status, Address, Date, Description,
-                        District, Email, Image1, Image2, Longitude, Latitude, Reason, Type));
-                }
-            }
-        );
-    });
-    return cards
+    var q = (searchString || '').toLowerCase();
+    var rows = await SafeMeComplaints.fetchAllComplaintsMerged();
+    return rows
+        .filter(function (row) {
+            var name = (row.Name || '').toLowerCase();
+            var nic = (row.NIC || '').toLowerCase();
+            var city = (row.City || '').toLowerCase();
+            return name.includes(q) || nic.includes(q) || city.includes(q);
+        })
+        .map(rowToCard);
 }
 
 async function search(searchString) {
@@ -161,43 +119,16 @@ function updateFilter() {
 }
 
 async function filterAwait() {
-    var cards4 = []
-
-    var task = await firebase.database().ref('Complaints/All').once('value', function (snapshot) {
-        snapshot.forEach(
-            function (ChildSnapshot) {
-                let ProfileImage = ChildSnapshot.val().ProfileImage;
-                let Name = ChildSnapshot.val().Name;
-                let NIC = ChildSnapshot.val().NIC;
-                let ContactNo = ChildSnapshot.val().Mobile;
-                let CID = ChildSnapshot.val().CID;
-                let City = ChildSnapshot.val().City;
-                let Status = ChildSnapshot.val().Status;
-                let Address = ChildSnapshot.val().Address;
-                let Date = ChildSnapshot.val().Date;
-                let Description = ChildSnapshot.val().Description;
-                let District = ChildSnapshot.val().District;
-                let Email = ChildSnapshot.val().Email;
-                let Image1 = ChildSnapshot.val().Image1;
-                let Image2 = ChildSnapshot.val().Image2;
-                let Latitude = ChildSnapshot.val().Latitude;
-                let Longitude = ChildSnapshot.val().Longitude;
-                let Reason = ChildSnapshot.val().Reason;
-                let Type = ChildSnapshot.val().Type;
-
-                if (Status.includes(filtervalue)) {
-                    cards4.push(generateComplaints(ProfileImage, Name, NIC, ContactNo, CID, City, Status, Address, Date, Description,
-                        District, Email, Image1, Image2, Longitude, Latitude, Reason, Type));
-                } else if (filtervalue === "All") {
-                    cards4.push(generateComplaints(ProfileImage, Name, NIC, ContactNo, CID, City, Status, Address, Date, Description,
-                        District, Email, Image1, Image2, Longitude, Latitude, Reason, Type));
-                }
-
+    var rows = await SafeMeComplaints.fetchAllComplaintsMerged();
+    return rows
+        .filter(function (row) {
+            var status = row.Status || '';
+            if (filtervalue === 'All') {
+                return true;
             }
-        );
-
-    });
-    return cards4
+            return status.includes(filtervalue);
+        })
+        .map(rowToCard);
 }
 
 async function filter() {
@@ -207,14 +138,13 @@ async function filter() {
 }
 
 /********************Passing values to second page***************************/
-function viewMore(CID,Date,Longitude,Latitude,Type){
-    localStorage.setItem("ComplaintCID",CID);
-    localStorage.setItem("ComplaintDate",Date);
-    localStorage.setItem("ComplaintLongitude",Longitude);
-    localStorage.setItem("ComplaintLatitude",Latitude);
-    localStorage.setItem("ComplaintType",Type);
+function viewMore(CID, Date, Longitude, Latitude, Type, NIC){
+    localStorage.setItem("ComplaintCID", CID);
+    localStorage.setItem("ComplaintNIC", NIC || '');
+    localStorage.setItem("ComplaintDate", Date);
+    localStorage.setItem("ComplaintLongitude", Longitude);
+    localStorage.setItem("ComplaintLatitude", Latitude);
+    localStorage.setItem("ComplaintType", Type);
 };
 
-if (cardClass) {
-    fetchAllComplaints();
-}
+/* fetch runs inside onAuthStateChanged when signed in */

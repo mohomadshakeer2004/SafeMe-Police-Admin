@@ -17,42 +17,74 @@ var CIDFromPrevoiusPage;
 CIDFromPrevoiusPage = localStorage.getItem("ComplaintCID");
 safemeDom.setHtml('cid', CIDFromPrevoiusPage);
 
+var resolvedComplaint = null;
+
+function applyComplaintToForm(d) {
+    if (!d) {
+        return;
+    }
+    safemeDom.setSrc('profilePic', d.ProfileImage);
+    safemeDom.setValue('name', d.Name);
+    safemeDom.setValue('number', d.Mobile);
+    safemeDom.setValue('address', d.Address);
+    safemeDom.setValue('district', d.District);
+    safemeDom.setValue('cid', d.CID);
+    safemeDom.setValue('type', d.Type);
+    safemeDom.setValue('date', d.Date);
+    safemeDom.setValue('nic', d.NIC);
+    safemeDom.setValue('email', d.Email);
+    safemeDom.setValue('city', d.City);
+    safemeDom.setValue('description', d.Description);
+    safemeDom.setSrc('evidence1', d.Image1);
+    safemeDom.setSrc('evidence2', d.Image2);
+    safemeDom.setValue('policeNote', d.PoliceNote);
+    safemeDom.setValue('complaint-name', d.Name);
+    safemeDom.setValue('complaint-ID', CIDFromPrevoiusPage);
+    safemeDom.setValue('complaint-email', d.Email);
+    safemeDom.setValue('complaint-comment', d.PoliceNote);
+    if (d.NIC) {
+        localStorage.setItem('ComplaintNIC', d.NIC);
+    }
+}
+
 /**Getting the details from DB and setting it in the text field*/
-function setDetails() {
+async function setDetails() {
     if (!CIDFromPrevoiusPage) {
         return;
     }
-    firebase.database().ref('Complaints/All/' + CIDFromPrevoiusPage).on('value', function (snapshot) {
-        var d = snapshot.val();
-        if (!d) {
-            return;
-        }
-        safemeDom.setSrc('profilePic', d.ProfileImage);
-        safemeDom.setValue('name', d.Name);
-        safemeDom.setValue('number', d.Mobile);
-        safemeDom.setValue('address', d.Address);
-        safemeDom.setValue('district', d.District);
-        safemeDom.setValue('cid', d.CID);
-        safemeDom.setValue('type', d.Type);
-        safemeDom.setValue('date', d.Date);
-        safemeDom.setValue('nic', d.NIC);
-        safemeDom.setValue('email', d.Email);
-        safemeDom.setValue('city', d.City);
-        safemeDom.setValue('description', d.Description);
-        safemeDom.setSrc('evidence1', d.Image1);
-        safemeDom.setSrc('evidence2', d.Image2);
-        safemeDom.setValue('policeNote', d.PoliceNote);
-        safemeDom.setValue('complaint-name', d.Name);
-        safemeDom.setValue('complaint-ID', CIDFromPrevoiusPage);
-        safemeDom.setValue('complaint-email', d.Email);
-        safemeDom.setValue('complaint-comment', d.PoliceNote);
-    });
+    resolvedComplaint = await SafeMeComplaints.findComplaintByCid(CIDFromPrevoiusPage);
+    if (!resolvedComplaint || !resolvedComplaint.data) {
+        console.warn('Complaint not found:', CIDFromPrevoiusPage);
+        return;
+    }
+    applyComplaintToForm(resolvedComplaint.data);
+
+    if (resolvedComplaint.primaryPath) {
+        firebase.database().ref(resolvedComplaint.primaryPath).on('value', function (snapshot) {
+            applyComplaintToForm(snapshot.val());
+        });
+    }
 }
 
 setDetails();
 
 var DefaultMessage = "Complaint is on Ongoing Stage";
 var PendingMessage = "Complaint is on Pending Stage";
+
+async function applyStatusUpdate(statVal, pNote) {
+    var updates = { Status: statVal };
+    if (statVal == "Ongoing") {
+        updates.PoliceNote = DefaultMessage;
+    } else if (statVal == "Closed") {
+        updates.PoliceNote = pNote;
+    } else {
+        updates.PoliceNote = PendingMessage;
+    }
+    await SafeMeComplaints.updateComplaintEverywhere(
+        CIDFromPrevoiusPage,
+        updates
+    );
+}
 
 //Update Function
 function updateComplaint() {
@@ -75,48 +107,18 @@ function updateComplaint() {
 
         return;
     } else {
-        if (statVal == "Ongoing") {
-            /**updating the Status*/
-            firebase.database().ref('Complaints/All/' + CIDFromPrevoiusPage).update({
-                Status: statVal,
-            });
-
-            /**updating the Police Note*/
-            firebase.database().ref('Complaints/All/' + CIDFromPrevoiusPage).update({
-                PoliceNote: DefaultMessage,
-            });
-
-        } else if (statVal == "Closed") {
-            if (pNote == "") {
-                Swal.fire({
-                    icon: 'warning',
-                    text: 'Please enter a police note to continue',
-                })
-            } else {
-                /**updating the Status*/
-                firebase.database().ref('Complaints/All/' + CIDFromPrevoiusPage).update({
-                    Status: statVal,
-                });
-
-                /**updating the Police Note*/
-                firebase.database().ref('Complaints/All/' + CIDFromPrevoiusPage).update({
-                    PoliceNote: pNote,
-                });
-
-            }
-
-        } else {
-            /**updating the Status*/
-            firebase.database().ref('Complaints/All/' + CIDFromPrevoiusPage).update({
-                Status: statVal,
-            });
-
-            /**updating the Police Note*/
-            firebase.database().ref('Complaints/All/' + CIDFromPrevoiusPage).update({
-                PoliceNote: PendingMessage,
-            });
+        if (statVal == "Closed" && pNote == "") {
+            Swal.fire({
+                icon: 'warning',
+                text: 'Please enter a police note to continue',
+            })
+            return;
         }
 
+        applyStatusUpdate(statVal, pNote).catch(function (e) {
+            console.error(e);
+            Swal.fire({ icon: 'error', text: 'Could not update complaint status.' });
+        });
     }
 
 }
