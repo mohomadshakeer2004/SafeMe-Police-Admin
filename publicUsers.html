@@ -12,12 +12,11 @@
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/metisMenu.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/app.min.css" rel="stylesheet" type="text/css"/>
-    <link href="assets/css/safeme-admin-theme.css?v=20260723k" rel="stylesheet" type="text/css"/>
-    <link href="assets/css/profileCard.css" rel="stylesheet" type="text/css"/>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/safeme-admin-theme.css?v=20260723pu" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/public-users.css?v=20260723pu" rel="stylesheet" type="text/css"/>
 </head>
 
-<body class="dark-sidenav">
+<body class="dark-sidenav public-users-page">
 <!-- Left Sidenav -->
 <div class="left-sidenav">
     <!-- LOGO -->
@@ -122,38 +121,25 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="page-title-box">
-                        <div class="row">
-                            <div class="col">
+                        <div class="pu-page-head">
+                            <div>
                                 <h4 class="page-title">Public Users</h4>
-                            </div><!--end col-->
-                        </div><!--end row-->
-                    </div><!--end page-title-box-->
-                </div><!--end col-->
-            </div><!--end row-->
-            <!-- end page title end breadcrumb -->
-
-            <div class="content">
-                <div class="container">
-
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="">
-                                <div class="input-group">
-                                    <input  type="text" class="form-control" id="searchBar" placeholder="Search"
-                                            aria-label="Recipient's username" aria-describedby="button-addon2">
-                                </div>
+                                <p class="pu-page-sub">Registered citizens in the SafeMe system</p>
                             </div>
-
+                            <span class="pu-count-pill" id="pu-count">Loading…</span>
                         </div>
-                    </div><!--end card-header-->
-
-                    <div class="row" id="public-users">
-
-                        <!-- Generated From DB -->
                     </div>
-                    <!-- end row -->
                 </div>
-                <!-- container -->
+            </div>
+
+            <div class="pu-toolbar">
+                <input type="text" class="form-control" id="searchBar"
+                       placeholder="Search by name, NIC, city, email, or mobile"
+                       aria-label="Search public users">
+            </div>
+
+            <div class="row" id="public-users">
+                <!-- Generated From DB -->
             </div>
 
         </div>
@@ -174,7 +160,8 @@
 <script src="firebase-JS/firebase-config.js?v=20250604"></script>
 <script src="firebase-JS/firebase-config.local.js"></script>
 <script src="firebase-JS/firebase.js"></script>
-<script src="firebase-JS/publicUsers.js"></script>
+<script src="firebase-JS/safeme-media.js?v=20260723lf"></script>
+<script src="firebase-JS/publicUsers.js?v=20260723pu"></script>
 <script src="firebase-JS/topAndSideNavBar.js"></script>
 
 <!-- jQuery  -->
