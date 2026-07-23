@@ -1,11 +1,9 @@
 var SAFEME_EXPIRED_API_KEY_PREFIX = "AIzaSyD8TcLRnV2ehh";
 
+/** Require manual email/password each visit — clear any saved session on the login page. */
 (function () {
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            window.location.replace("dashboard.html");
-        }
-    });
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(function () {});
+    firebase.auth().signOut().catch(function () {});
 })();
 
 /** Cached old firebase-config.js still triggers expired-key errors — warn before login. */
@@ -21,9 +19,6 @@ var SAFEME_EXPIRED_API_KEY_PREFIX = "AIzaSyD8TcLRnV2ehh";
 })();
 
 /** Same Firebase Auth account as the mobile app service user (RTDB rules require auth). */
-var ADMIN_EMAIL = "admin@safeme.app";
-var ADMIN_PASSWORD = "SafeMe123";
-
 var SAFEME_AUTH_PROXY = "http://127.0.0.1:8787";
 
 function safemeIsLocalDev() {
@@ -141,7 +136,7 @@ function safemeDirectLogin(email, password) {
 }
 
 function safemeAfterLogin() {
-    window.location.replace("dashboard.html");
+    window.location.href = "dashboard.html";
 }
 
 function safemeHandleLoginError(error, email, password) {

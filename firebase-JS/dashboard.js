@@ -92,6 +92,28 @@ async function fetchPendingPublicAppointment() {
             window.location.replace('index.html');
             return;
         }
+        if (window.safemeCounters && typeof safemeCounters.recountFromAll === 'function') {
+            safemeCounters.recountFromAll().catch(function (e) {
+                console.warn('SafeMe counter recount failed:', e);
+            });
+        }
+        if (window.SafeMeComplaints && typeof SafeMeComplaints.recountComplaintCounts === 'function') {
+            SafeMeComplaints.recountComplaintCounts().catch(function (e) {
+                console.warn('Complaint recount failed:', e);
+            });
+        }
+        if (window.SafeMeAppointments) {
+            if (typeof SafeMeAppointments.recountPoliceAppointmentCount === 'function') {
+                SafeMeAppointments.recountPoliceAppointmentCount().catch(function (e) {
+                    console.warn('Police appointment recount failed:', e);
+                });
+            }
+            if (typeof SafeMeAppointments.recountPublicAppointmentCount === 'function') {
+                SafeMeAppointments.recountPublicAppointmentCount().catch(function (e) {
+                    console.warn('Public appointment recount failed:', e);
+                });
+            }
+        }
         if (cardClass) {
             fetchPendingComplaints().catch(function (e) {
                 console.error('fetchPendingComplaints failed:', e);

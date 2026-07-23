@@ -13,6 +13,7 @@
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/metisMenu.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/app.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/safeme-admin-theme.css?v=20260723k" rel="stylesheet" type="text/css"/>
 
 </head>
 
@@ -194,6 +195,18 @@
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
+                                        <label class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Status</label>
+                                        <div class="col-sm-10">
+                                            <input disabled="disabled" id="pub-status" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row" id="pub-fine-row" style="display:none;">
+                                        <label class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Cancel Fine</label>
+                                        <div class="col-sm-10">
+                                            <input disabled="disabled" id="pub-fine" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
                                         <label class="col-sm-2 form-label align-self-center mb-lg-0 text-end">Schedule Date</label>
                                         <div class="col-sm-10">
                                             <input class="form-control" type="date" id="pub-sheduled-date">
@@ -242,8 +255,12 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-12 text-end">
-                                            <button onclick="update()" type="submit" class="btn btn-primary px-4">Update</button>
+                                        <div class="col-sm-12 text-end" id="pub-cancel-actions" style="display:none;">
+                                            <button onclick="approveCancelFromDetail()" type="button" class="btn btn-success px-4 me-2">Approve Cancel (Fine)</button>
+                                            <button onclick="rejectCancelFromDetail()" type="button" class="btn btn-outline-secondary px-4 me-2">Reject Cancel</button>
+                                        </div>
+                                        <div class="col-sm-12 text-end mt-2">
+                                            <button onclick="update()" type="submit" class="btn btn-primary px-4">Update Schedule</button>
                                         </div>
                                     </div>
 

@@ -157,12 +157,12 @@
         });
 
         return whenMapReady(map).then(function (readyMap) {
-            new w.google.maps.Marker({
+            var marker = new w.google.maps.Marker({
                 map: readyMap,
                 position: position,
                 title: options.title || "Location",
             });
-            return readyMap;
+            return { map: readyMap, marker: marker };
         });
     }
 
@@ -229,21 +229,22 @@
                 });
 
                 return whenMapReady(map).then(function (readyMap) {
+                    var marker = null;
                     try {
-                        new AdvancedMarkerElement({
+                        marker = new AdvancedMarkerElement({
                             map: readyMap,
                             position: position,
                             title: options.title || "Location",
                         });
                     } catch (markerErr) {
                         console.warn("SafeMe advanced marker failed:", markerErr);
-                        new w.google.maps.Marker({
+                        marker = new w.google.maps.Marker({
                             map: readyMap,
                             position: position,
                             title: options.title || "Location",
                         });
                     }
-                    return readyMap;
+                    return { map: readyMap, marker: marker };
                 });
             })
             .catch(function (err) {

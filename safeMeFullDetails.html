@@ -12,6 +12,7 @@
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/metisMenu.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/app.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/safeme-admin-theme.css?v=20260723img" rel="stylesheet" type="text/css"/>
     <link href="assets/css/safeme-map.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/safeMeProfileCard.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
@@ -180,6 +181,8 @@
                                                     <option value="Alert Sent">Alert Sent</option>
                                                     <option value="Action Taken">Action Taken</option>
                                                     <option value="Closed">Closed</option>
+                                                    <option value="Delete Requested">Delete Requested</option>
+                                                    <option value="Delete Approved">Delete Approved</option>
                                                 </select>
                                             </div>
 
@@ -209,6 +212,8 @@
                                                                     <option value="Alert Sent">Alert Sent</option>
                                                                     <option value="Action Taken">Action Taken</option>
                                                                     <option value="Closed">Closed</option>
+                                                                    <option value="Delete Requested">Delete Requested</option>
+                                                                    <option value="Delete Approved">Delete Approved</option>
                                                                 </select>
                                                                 <h6 style="text-align: left; " >Comments</h6>
                                                                 <textarea id="safe-me-comment" rows="3" style="resize: none" type = "text" class = "comment form-control" ></textarea><p></p>
@@ -236,7 +241,8 @@
                     <div class="page-title-box">
                         <div class="row">
                             <div class="col-5">
-                                <h6 class="page-title">Recent Location</h6>
+                                <h6 class="page-title"><span id="safeme-loc-user-name">Citizen</span> — current &amp; live location</h6>
+                                <p class="text-muted mb-0 small">From the citizen app when the phone is shaken — map updates in realtime while LIVE.</p>
                             </div><!--end col-->
                         </div><!--end row-->
                     </div><!--end page-title-box-->
@@ -286,9 +292,10 @@
 <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-database-compat.js"></script>
     <script src="firebase-JS/firebase-config.js?v=20250604"></script>
 <script src="firebase-JS/firebase-config.local.js"></script>
-<script src="firebase-JS/firebase.js"></script>
+<script src="firebase-JS/firebase.js?v=20260723cnt"></script>
+    <script src="firebase-JS/safeme-media.js?v=20260723img"></script>
     <script src="firebase-JS/topAndSideNavBar.js"></script>
-    <script src="firebase-JS/SafeMeAllDetails.js"></script>
+    <script src="firebase-JS/SafeMeAllDetails.js?v=20260723img"></script>
 
 
     <!-- jQuery  -->
@@ -304,7 +311,7 @@
     <script src="assets/js/google-maps-config.local.js"></script>
     <script src="assets/js/google-maps-loader.js?v=20250604b"></script>
     <script src="assets/js/safeme-map.js?v=20250604b"></script>
-    <script src="assets/js/jquery.gmaps.init.js"></script>
+    <script src="assets/js/jquery.gmaps.init.js?v=20260723live"></script>
     <script src="https://smtpjs.com/v3/smtp.js"></script>
 
 </div>

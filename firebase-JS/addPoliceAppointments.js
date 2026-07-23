@@ -94,7 +94,7 @@ function validateNAdd(){
                 icon: 'success',
                 text: 'Appointment Added!',
             }).then((result)=>{
-                location.replace("policeAppointments.html");
+                window.location.href = "policeAppointments.html";
             })
         }else {
             Swal.fire({

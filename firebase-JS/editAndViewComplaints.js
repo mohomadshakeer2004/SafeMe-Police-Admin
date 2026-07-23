@@ -23,7 +23,22 @@ function applyComplaintToForm(d) {
     if (!d) {
         return;
     }
-    safemeDom.setSrc('profilePic', d.ProfileImage);
+    var media = window.safemeMedia;
+    if (media) {
+        media.setImg('profilePic', d.ProfileImage, { placeholder: media.PLACEHOLDER });
+        media.renderEvidenceGallery(
+            'evidence-gallery',
+            [d.Image1, d.Image2],
+            'evidence-empty'
+        );
+        // Keep legacy hidden imgs in sync
+        media.bindEvidenceSlot('evidence1', d.Image1);
+        media.bindEvidenceSlot('evidence2', d.Image2);
+    } else {
+        safemeDom.setSrc('profilePic', d.ProfileImage);
+        safemeDom.setSrc('evidence1', d.Image1);
+        safemeDom.setSrc('evidence2', d.Image2);
+    }
     safemeDom.setValue('name', d.Name);
     safemeDom.setValue('number', d.Mobile);
     safemeDom.setValue('address', d.Address);
@@ -35,8 +50,6 @@ function applyComplaintToForm(d) {
     safemeDom.setValue('email', d.Email);
     safemeDom.setValue('city', d.City);
     safemeDom.setValue('description', d.Description);
-    safemeDom.setSrc('evidence1', d.Image1);
-    safemeDom.setSrc('evidence2', d.Image2);
     safemeDom.setValue('policeNote', d.PoliceNote);
     safemeDom.setValue('complaint-name', d.Name);
     safemeDom.setValue('complaint-ID', CIDFromPrevoiusPage);
@@ -44,6 +57,13 @@ function applyComplaintToForm(d) {
     safemeDom.setValue('complaint-comment', d.PoliceNote);
     if (d.NIC) {
         localStorage.setItem('ComplaintNIC', d.NIC);
+    }
+    var titleEl = document.getElementById('evidence-card-title');
+    if (titleEl) {
+        titleEl.textContent =
+            d.Type === 'Lost And Found'
+                ? 'Lost & Found evidence photos'
+                : 'Complaint evidence photos';
     }
 }
 
@@ -97,30 +117,45 @@ function updateComplaint() {
     var pNote = noteEl ? noteEl.value : '';
 
     if (statVal == "Select status") {
-        Swal.fire({
-            icon: 'warning',
-            text: 'Please select a status!',
-        }).then(()=>{
-            location.reload();
-        })
-        return;
-
-        return;
-    } else {
-        if (statVal == "Closed" && pNote == "") {
-            Swal.fire({
-                icon: 'warning',
-                text: 'Please enter a police note to continue',
-            })
-            return;
+        if (window.safemeUi) {
+            safemeUi.toastWarn('Select a status', 'Please choose a complaint status before updating.');
+        } else {
+            Swal.fire({ icon: 'warning', text: 'Please select a status!' });
         }
-
-        applyStatusUpdate(statVal, pNote).catch(function (e) {
-            console.error(e);
-            Swal.fire({ icon: 'error', text: 'Could not update complaint status.' });
-        });
+        return;
     }
 
+    if (statVal == "Closed" && pNote == "") {
+        if (window.safemeUi) {
+            safemeUi.toastWarn('Police note required', 'Please enter a police note to close this complaint.');
+        } else {
+            Swal.fire({ icon: 'warning', text: 'Please enter a police note to continue' });
+        }
+        return;
+    }
+
+    applyStatusUpdate(statVal, pNote)
+        .then(function () {
+            if (window.safemeUi) {
+                return safemeUi.toastSuccess(
+                    'Complaint updated',
+                    'Status changed to "' + statVal + '".'
+                );
+            }
+            return Swal.fire({
+                icon: 'success',
+                title: 'Updated successfully',
+                text: 'Status changed to "' + statVal + '".',
+            });
+        })
+        .catch(function (e) {
+            console.error(e);
+            if (window.safemeUi) {
+                safemeUi.toastError('Update failed', 'Could not update complaint status.');
+            } else {
+                Swal.fire({ icon: 'error', text: 'Could not update complaint status.' });
+            }
+        });
 }
 
 //setting up the variables and get values from fields

@@ -14,6 +14,7 @@
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/metisMenu.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/app.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/safeme-admin-theme.css?v=20260723lf" rel="stylesheet" type="text/css"/>
     <link href="assets/css/safeme-map.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <script src="https://smtpjs.com/v3/smtp.js"></script>
@@ -206,6 +207,8 @@
                                                 <option>Pending</option>
                                                 <option value="Ongoing">Ongoing</option>
                                                 <option value="Closed">Closed</option>
+                                                <option value="Delete Requested">Delete Requested</option>
+                                                <option value="Delete Approved">Delete Approved</option>
                                             </select>
                                         </div>
                                     </div>
@@ -272,6 +275,8 @@
                                                                     <option value="Pending">Pending</option>
                                                                     <option value="Ongoing">Ongoing</option>
                                                                     <option value="Closed">Closed</option>
+                                                                    <option value="Delete Requested">Delete Requested</option>
+                                                                    <option value="Delete Approved">Delete Approved</option>
                                                                 </select>
                                                                 <h6 style="text-align: left; " >Police Notes</h6>
                                                                 <textarea id="complaint-comment" rows="3" style="resize: none" type = "text" class = "comment form-control" ></textarea><p></p>
@@ -308,17 +313,14 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Complaint Evidences </h4>
+                            <h4 class="card-title" id="evidence-card-title">Evidence photos</h4>
                         </div><!--end card-header-->
                         <div class="card-body">
-                            <!-- Flickity HTML init -->
-                            <div class="gallery2 js-flickity"
-                                 data-flickity-options='{ "wrapAround": true }'>
-                                <img src="" id="evidence1" class="gallery-cell2"></img>
-                                <img src="" id="evidence2" class="gallery-cell2"></img>
-                            </div>
-
-
+                            <p id="evidence-empty" class="text-muted mb-2">No evidence images attached.</p>
+                            <div id="evidence-gallery" class="safeme-evidence-gallery"></div>
+                            <!-- Legacy ids kept for compatibility (hidden) -->
+                            <img src="" id="evidence1" alt="" class="d-none" />
+                            <img src="" id="evidence2" alt="" class="d-none" />
                         </div><!--end card-body-->
                     </div><!--end card-->
                 </div><!--end col-->
@@ -341,8 +343,9 @@
 <script src="firebase-JS/firebase-config.js?v=20250604"></script>
 <script src="firebase-JS/firebase-config.local.js"></script>
 <script src="firebase-JS/firebase.js"></script>
-<script src="firebase-JS/complaint-data.js"></script>
-<script src="firebase-JS/editAndViewComplaints.js"></script>
+<script src="firebase-JS/complaint-data.js?v=20260723cmp"></script>
+<script src="firebase-JS/safeme-media.js?v=20260723lf"></script>
+<script src="firebase-JS/editAndViewComplaints.js?v=20260723lf"></script>
 <script src="firebase-JS/topAndSideNavBar.js"></script>
 
 <!-- jQuery  -->

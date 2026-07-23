@@ -12,10 +12,11 @@
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/metisMenu.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/app.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/safeme-admin-theme.css?v=20260723k" rel="stylesheet" type="text/css"/>
 
 </head>
 
-<body class="dark-sidenav">
+<body class="dark-sidenav dashboard-page">
 <!-- Left Sidenav -->
 <div class="left-sidenav">
     <!-- LOGO -->
@@ -34,37 +35,42 @@
         <ul class="metismenu left-sidenav-menu">
             <li class="menu-label mt-0">Main</li>
             <li>
-                <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span
-                        onclick="goToDashboard()">Dashboard</span><span
-                        class="menu-arrow"></span></a>
+                <a href="dashboard.html" onclick="goToDashboard(); return false;">
+                    <i data-feather="home" class="align-self-center menu-icon"></i><span>Dashboard</span>
+                </a>
             </li>
 
             <li>
-                <a href="javascript: void(0);"><i data-feather="clipboard" class="align-self-center menu-icon"></i><span
-                        onclick="goToComplaints()">Complaints</span><span
-                        class="menu-arrow"></span></a>
+                <a href="complaints.html" onclick="goToComplaints(); return false;">
+                    <i data-feather="clipboard" class="align-self-center menu-icon"></i><span>Complaints</span>
+                </a>
+            </li>
+            <li>
+                <a href="lostAndFound.html" onclick="goToLostAndFound(); return false;">
+                    <i data-feather="search" class="align-self-center menu-icon"></i><span>Lost & Found</span>
+                </a>
             </li>
             <li>
                 <a href="javascript: void(0);"><i data-feather="clock" class="align-self-center menu-icon"></i><span>Appointments</span><span
                         class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
                 <ul class="nav-second-level" aria-expanded="false">
-                    <li class="nav-item"><a class="nav-link" href="#" onclick="goToPublicAppointments()"><i
+                    <li class="nav-item"><a class="nav-link" href="publicAppointments.html" onclick="goToPublicAppointments(); return false;"><i
                             class="ti-control-record"></i>Public</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" onclick="goToPoliceAppointments()"><i
+                    <li class="nav-item"><a class="nav-link" href="policeAppointments.html" onclick="goToPoliceAppointments(); return false;"><i
                             class="ti-control-record"></i>Police</a></li>
                 </ul>
             </li>
 
 
             <li>
-                <a href="javascript: void(0);"><i data-feather="activity" class="align-self-center menu-icon"></i><span
-                        onclick="goToSafeMe()">Safe Me</span><span
-                        class="menu-arrow"></span></a>
+                <a href="safeMe.html" onclick="goToSafeMe(); return false;">
+                    <i data-feather="activity" class="align-self-center menu-icon"></i><span>Safe Me</span>
+                </a>
             </li>
             <li>
-                <a href="javascript: void(0);"><i data-feather="users" class="align-self-center menu-icon"></i><span
-                        onclick="goToPublicUsers()">Users</span><span
-                        class="menu-arrow"></span></a>
+                <a href="publicUsers.html" onclick="goToPublicUsers(); return false;">
+                    <i data-feather="users" class="align-self-center menu-icon"></i><span>Users</span>
+                </a>
             </li>
             <li>
                 <a href="javascript: void(0);"><i data-feather="file-text"
@@ -148,8 +154,9 @@
                 <div class="col-lg-12">
                     <div class="row justify-content-center">
                         <div class="col-md-6 col-lg-3">
-                            <div class="card-indication-bar1 card report-card">
-                                <div class="card-body" style=" background-color: rgba(253,2,30,0.10)">
+                            <div class="card-indication-bar1 card report-card" style="cursor:pointer"
+                                 onclick="goToComplaints()" role="link" title="View complaints list">
+                                <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col">
                                             <p class="text-dark mb-0 fw-semibold">Total Complaints</p>
@@ -158,7 +165,7 @@
                                         <div class="col-auto align-self-center">
                                             <div class="report-main-icon bg-light-alt">
                                                 <i data-feather="clipboard"
-                                                   class="align-self-center  icon-sm" style="color:#fd021e "></i>
+                                                   class="align-self-center  icon-sm"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -167,8 +174,9 @@
                             </div><!--end card-->
                         </div> <!--end col-->
                         <div class="col-md-6 col-lg-3">
-                            <div class="card-indication-bar2 card report-card">
-                                <div class="card-body" style="background-color: rgba(96,253,3,0.10) ">
+                            <div class="card-indication-bar2 card report-card" style="cursor:pointer"
+                                 onclick="goToPublicAppointments()" role="link" title="View public appointments">
+                                <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col">
                                             <p class="text-dark mb-0 fw-semibold">Public Appointments</p>
@@ -177,7 +185,7 @@
                                         <div class="col-auto align-self-center">
                                             <div class="report-main-icon bg-light-alt">
                                                 <i data-feather="clock"
-                                                   class="align-self-center  icon-sm"style="color:#60fd03 "></i>
+                                                   class="align-self-center  icon-sm"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -185,8 +193,9 @@
                             </div><!--end card-->
                         </div> <!--end col-->
                         <div class="col-md-6 col-lg-3">
-                            <div class="card-indication-bar3 card report-card">
-                                <div class="card-body" style="background-color:rgba(217,1,250,0.1)">
+                            <div class="card-indication-bar3 card report-card" style="cursor:pointer"
+                                 onclick="goToSafeMe()" role="link" title="View SafeMe list">
+                                <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col">
                                             <p class="text-dark mb-0 fw-semibold">Total SafeMe</p>
@@ -195,7 +204,7 @@
                                         <div class="col-auto align-self-center">
                                             <div class="report-main-icon bg-light-alt">
                                                 <i data-feather="activity"
-                                                   class="align-self-center  icon-sm"style="color:#fc5a05 "></i>
+                                                   class="align-self-center  icon-sm"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -203,8 +212,9 @@
                             </div><!--end card-->
                         </div> <!--end col-->
                         <div class="col-md-6 col-lg-3">
-                            <div class="card-indication-bar4 card report-card">
-                                <div class="card-body" style="background-color: rgba(0,224,250,0.1)">
+                            <div class="card-indication-bar4 card report-card" style="cursor:pointer"
+                                 onclick="goToSafeMe()" role="link" title="View SafeMe list">
+                                <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col">
                                             <p class="text-dark mb-0 fw-semibold">Pending SafeMe</p>
@@ -213,7 +223,7 @@
                                         <div class="col-auto align-self-center">
                                             <div class="report-main-icon bg-light-alt">
                                                 <i data-feather="briefcase"
-                                                   class="align-self-center  icon-sm"style="color:#00e0fa "></i>
+                                                   class="align-self-center  icon-sm"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -223,8 +233,9 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-md-6 col-lg-3">
-                            <div class="card-indication-bar5 card report-card">
-                                <div class="card-body"style="background-color: rgba(117,2,246,0.1)">
+                            <div class="card-indication-bar5 card report-card" style="cursor:pointer"
+                                 onclick="goToPublicUsers()" role="link" title="View users list">
+                                <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col">
                                             <p class="text-dark mb-0 fw-semibold">User Count</p>
@@ -233,7 +244,7 @@
                                         <div class="col-auto align-self-center">
                                             <div class="report-main-icon bg-light-alt">
                                                 <i data-feather="users"
-                                                   class="align-self-center icon-sm" style="color: #7502f6"></i>
+                                                   class="align-self-center icon-sm"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -242,8 +253,9 @@
                             </div><!--end card-->
                         </div> <!--end col-->
                         <div class="col-md-6 col-lg-3">
-                            <div class="card-indication-bar6 card report-card">
-                                <div class="card-body" style="background-color: rgba(12,33,58,0.1) ">
+                            <div class="card-indication-bar6 card report-card" style="cursor:pointer"
+                                 onclick="goToPoliceAppointments()" role="link" title="View police appointments">
+                                <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col">
                                             <p class="text-dark mb-0 fw-semibold">Police Appointments</p>
@@ -252,7 +264,7 @@
                                         <div class="col-auto align-self-center">
                                             <div class="report-main-icon bg-light-alt">
                                                 <i data-feather="file-text"
-                                                   class="align-self-center  icon-sm" style="color: #0C213A"></i>
+                                                   class="align-self-center  icon-sm"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -260,8 +272,9 @@
                             </div><!--end card-->
                         </div> <!--end col-->
                         <div class="col-md-6 col-lg-3">
-                            <div class="card-indication-bar7 card report-card">
-                                <div class="card-body" style="background-color:rgba(187,201,0,0.1) ">
+                            <div class="card-indication-bar7 card report-card" style="cursor:pointer"
+                                 onclick="goToSafeMe()" role="link" title="View SafeMe list">
+                                <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col">
                                             <p class="text-dark mb-0 fw-semibold">Completed SafeMe</p>
@@ -270,7 +283,7 @@
                                         <div class="col-auto align-self-center">
                                             <div class="report-main-icon bg-light-alt">
                                                 <i data-feather="check-square"
-                                                   class="align-self-center  icon-sm"style="color: #bbc900"></i>
+                                                   class="align-self-center  icon-sm"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -278,8 +291,9 @@
                             </div><!--end card-->
                         </div> <!--end col-->
                         <div class="col-md-6 col-lg-3">
-                            <div class="card-indication-bar8 card report-card">
-                                <div class="card-body" style="background-color: rgba(121,74,192,0.1)">
+                            <div class="card-indication-bar8 card report-card" style="cursor:pointer"
+                                 onclick="goToLostAndFound()" role="link" title="View lost and found list">
+                                <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col">
                                             <p class="text-dark mb-0 fw-semibold">Lost and Found</p>
@@ -288,7 +302,7 @@
                                         <div class="col-auto align-self-center">
                                             <div class="report-main-icon bg-light-alt">
                                                 <i data-feather="search"
-                                                   class="align-self-center  icon-sm" style="color: #794ac0"></i>
+                                                   class="align-self-center  icon-sm"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -305,16 +319,15 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
-                                <div class="card-header" style="background-color:#00347e">
+                                <div class="card-header">
                                     <div class="row align-items-center" >
                                         <div class="col">
                                             <h4 class="card-title">Complaints (Pending)</h4>
                                         </div><!--end col-->
                                         <div class="col-auto">
                                             <div class="dropdown">
-                                                <a href="" onclick="goToComplaints()"
-                                                   class="btn btn-sm btn-outline-light"
-                                                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <a href="complaints.html" onclick="goToComplaints(); return false;"
+                                                   class="btn btn-sm btn-outline-light">
                                                     View All
                                                 </a>
                                             </div>
@@ -349,16 +362,15 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
-                                <div class="card-header"style="background-color:#00347e">
+                                <div class="card-header">
                                     <div class="row align-items-center">
                                         <div class="col">
                                             <h4 class="card-title">Appointments (Public)</h4>
                                         </div><!--end col-->
                                         <div class="col-auto">
                                             <div class="dropdown">
-                                                <a href="" onclick="goToPublicAppointments()"
-                                                   class="btn btn-sm btn-outline-light"
-                                                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <a href="publicAppointments.html" onclick="goToPublicAppointments(); return false;"
+                                                   class="btn btn-sm btn-outline-light">
                                                     View All
                                                 </a>
                                             </div>
@@ -411,10 +423,10 @@
 <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-database-compat.js"></script>
         <script src="firebase-JS/firebase-config.js?v=20250604"></script>
 <script src="firebase-JS/firebase-config.local.js"></script>
-<script src="firebase-JS/firebase.js"></script>
-        <script src="firebase-JS/complaint-data.js"></script>
-        <script src="firebase-JS/appointment-data.js"></script>
-        <script src="firebase-JS/dashboard.js"></script>
+<script src="firebase-JS/firebase.js?v=20260723cnt"></script>
+        <script src="firebase-JS/complaint-data.js?v=20260723cmp"></script>
+        <script src="firebase-JS/appointment-data.js?v=20260723appt"></script>
+        <script src="firebase-JS/dashboard.js?v=20260723cmp"></script>
         <script src="firebase-JS/topAndSideNavBar.js"></script>
 
         <!-- jQuery  -->

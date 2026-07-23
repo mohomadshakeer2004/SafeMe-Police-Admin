@@ -111,6 +111,40 @@
                 return db.ref(p).remove();
             })
         );
+        var metaSnap = await db.ref('Appointments').once('value');
+        var meta = metaSnap.val() || {};
+        var current = Number(meta.PublicAppointmentCount) || 0;
+        await db.ref('Appointments').update({
+            PublicAppointmentCount: Math.max(0, current - 1),
+        });
+    }
+
+    /** Rebuild PoliceAppointmentCount from PoliceAppointments children. */
+    async function recountPoliceAppointmentCount() {
+        var db = firebase.database();
+        var snap = await db.ref('Appointments/PoliceAppointments').once('value');
+        var total = 0;
+        snap.forEach(function (child) {
+            var row = child.val();
+            if (row && (row.AIDP != null || row.AID != null)) {
+                total += 1;
+            }
+        });
+        await db.ref('Appointments').update({
+            PoliceAppointmentCount: total,
+        });
+        return total;
+    }
+
+    /** Rebuild PublicAppointmentCount from merged public appointments. */
+    async function recountPublicAppointmentCount() {
+        var db = firebase.database();
+        var rows = await fetchAllPublicAppointmentsMerged();
+        var total = rows.length;
+        await db.ref('Appointments').update({
+            PublicAppointmentCount: total,
+        });
+        return total;
     }
 
     w.SafeMeAppointments = {
@@ -118,6 +152,8 @@
         findPublicAppointmentByAid: findPublicAppointmentByAid,
         updatePublicAppointmentEverywhere: updatePublicAppointmentEverywhere,
         deletePublicAppointmentEverywhere: deletePublicAppointmentEverywhere,
+        recountPoliceAppointmentCount: recountPoliceAppointmentCount,
+        recountPublicAppointmentCount: recountPublicAppointmentCount,
         LEGACY_ROOT: LEGACY_ROOT,
     };
 })(window);

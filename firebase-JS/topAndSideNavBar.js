@@ -21,39 +21,43 @@ function signOut(){
 
 }
 function goToDashboard(){
-    window.location.replace("dashboard.html");
+    window.location.href = "dashboard.html";
 }
 
 function goToComplaints(){
-    window.location.replace("complaints.html");
+    window.location.href = "complaints.html";
 }
 
 function goToPublicAppointments(){
-    window.location.replace("publicAppointments.html");
+    window.location.href = "publicAppointments.html";
 }
 
 function goToPoliceAppointments(){
-    window.location.replace("policeAppointments.html");
+    window.location.href = "policeAppointments.html";
 }
 
 function goToSafeMe(){
-    window.location.replace("safeMe.html");
+    window.location.href = "safeMe.html";
 }
 
 function goToPublicUsers(){
-    window.location.replace("publicUsers.html");
+    window.location.href = "publicUsers.html";
 }
 
 function goToAddPoliceAppointments(){
-    window.location.replace("addPoliceAppointments.html");
+    window.location.href = "addPoliceAppointments.html";
+}
+
+function goToLostAndFound(){
+    window.location.href = "lostAndFound.html";
 }
 
 function goToReports(){
-    window.location.replace("reports.html");
+    window.location.href = "reports.html";
 }
 
 function goToSummaryReports(){
-    window.location.replace("summaryReports.html");
+    window.location.href = "summaryReports.html";
 }
 
 (function () {

@@ -150,55 +150,105 @@ function deleteAppointments(AIDP){
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Delete Appointment!
-            var db = firebase.database();
-            var ref = db.ref();
-            var survey=db.ref("Appointments/PoliceAppointments");
-            survey.child(AIDP).remove();
-            location.reload();
+    }).then(function (result) {
+        if (!result.isConfirmed) {
+            return;
         }
-    })
+        var apptRef = firebase.database().ref('Appointments/PoliceAppointments/' + AIDP);
+        var metaRef = firebase.database().ref('Appointments');
+
+        apptRef
+            .once('value')
+            .then(function (snap) {
+                if (!snap.exists()) {
+                    throw new Error('Appointment not found');
+                }
+                return apptRef.remove();
+            })
+            .then(function () {
+                return metaRef.once('value');
+            })
+            .then(function (snap) {
+                var data = snap.val() || {};
+                var current = Number(data.PoliceAppointmentCount) || 0;
+                return metaRef.update({
+                    PoliceAppointmentCount: Math.max(0, current - 1),
+                });
+            })
+            .then(function () {
+                return Swal.fire({
+                    icon: 'success',
+                    title: 'Deleted',
+                    text: 'Police appointment removed. Dashboard count updated.',
+                    timer: 1400,
+                    showConfirmButton: false,
+                });
+            })
+            .then(function () {
+                location.reload();
+            })
+            .catch(function (e) {
+                console.error(e);
+                Swal.fire({ icon: 'error', text: 'Could not delete appointment.' });
+            });
+    });
 }
 /*******************************Update Appointment End*************************************** */
 function updateCompleted(AID) {
     Swal.fire({
-        title: 'Are you sure you want to update this appointment status to completed??',
-        text: "You won't be able to revert this!",
-        icon: 'success',
+        title: 'Mark as completed?',
+        text: 'This police appointment will be marked Completed.',
+        icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes'
+        confirmButtonColor: '#0c213a',
+        cancelButtonColor: '#94a3b8',
+        confirmButtonText: 'Yes, update'
     }).then((result) => {
-        if (result.isConfirmed) {
-            /**updating the Status of the Appointment to Completed*/
-            firebase.database().ref('Appointments/PoliceAppointments/'+AID).update({
-                Status:"Completed",
-            });
-            location.reload();
+        if (!result.isConfirmed) {
+            return;
         }
+        firebase.database().ref('Appointments/PoliceAppointments/'+AID).update({
+            Status:"Completed",
+        }).then(function () {
+            if (window.safemeUi) {
+                return safemeUi.toastSuccess('Updated successfully', 'Appointment marked as Completed.');
+            }
+            return Swal.fire({ icon: 'success', title: 'Updated successfully', text: 'Appointment marked as Completed.' });
+        }).then(function () {
+            location.reload();
+        }).catch(function (e) {
+            console.error(e);
+            Swal.fire({ icon: 'error', text: 'Update failed.' });
+        });
     })
 }
 
 function updatePending(AID) {
     Swal.fire({
-        title: 'Are you sure you want to update this appointment status to pending?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
+        title: 'Mark as pending?',
+        text: 'This police appointment will be marked Pending.',
+        icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes'
+        confirmButtonColor: '#0c213a',
+        cancelButtonColor: '#94a3b8',
+        confirmButtonText: 'Yes, update'
     }).then((result) => {
-        if (result.isConfirmed) {
-            /**updating the Status of the Appointment to Pending*/
-            firebase.database().ref('Appointments/PoliceAppointments/'+AID).update({
-                Status:"Pending",
-            });
-            location.reload();
+        if (!result.isConfirmed) {
+            return;
         }
+        firebase.database().ref('Appointments/PoliceAppointments/'+AID).update({
+            Status:"Pending",
+        }).then(function () {
+            if (window.safemeUi) {
+                return safemeUi.toastSuccess('Updated successfully', 'Appointment marked as Pending.');
+            }
+            return Swal.fire({ icon: 'success', title: 'Updated successfully', text: 'Appointment marked as Pending.' });
+        }).then(function () {
+            location.reload();
+        }).catch(function (e) {
+            console.error(e);
+            Swal.fire({ icon: 'error', text: 'Update failed.' });
+        });
     })
 }
 if (cardClass) {
